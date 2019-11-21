@@ -23,7 +23,6 @@ class RP {
 	 }
 }
 function drawGui() {
-
 	textSize(15);
 	mp = false;
 	rect(85, 75, 100, 40);
@@ -43,3 +42,23 @@ function drawGui() {
 	text(Opt2, 1110, 645);
 	text(roleText, 520, 600);
 }
+function updatekeys() {
+
+	if (keyIsDown(LEFT_ARROW) || keyDown("a")) {
+
+			player.position.x -= 5;
+
+		}
+
+		if (keyIsDown(RIGHT_ARROW) || keyDown("d")) {
+			player.position.x += 5;
+		}
+
+		if (keyIsDown(UP_ARROW) || keyDown("w")) {
+			player.position.y -= 5;
+		}
+
+		if (keyIsDown(DOWN_ARROW) || keyDown("s")) {
+			player.position.y += 5;
+		}
+	}
