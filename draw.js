@@ -1,4 +1,5 @@
 var player;
+var req = "world.json";
 var gamesprites = {};
 var world = [];
 function setup() {
