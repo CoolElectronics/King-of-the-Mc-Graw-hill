@@ -1,20 +1,21 @@
+var d;
 var tempwall;
 function createAllSprites() {
   player = createSprite(width / 2 , height / 2,40,40);
 }
 function makeWorldFromJson() {
 var request = new XMLHttpRequest();
-request.open('GET', requestURL);
-request.responseType = 'json';
+request.open('GET', req);
 request.send();
 request.onload = function() {
-           d = JSON.parse(data);
-         tempwall = createSprite(d[i.toString()["pos"][0]],d[i.toString()["pos"][1]],d[i.toString()["size"][0]],d[i.toString()["size"][1]]);
+           d = JSON.parse(request.responseText);
+           for (var i = 0; i < d.len ;i++){
+         tempwall = createSprite(d[i].pos[0],d[i].pos[1],d[i].size[0],d[i].size[1]);
          world.push(tempwall);
-         return tempwall;
+       }
 }
 }
-}
+
 function drawWorld() {
   drawSprites();
 }

@@ -25,22 +25,22 @@ class RP {
 function drawGui() {
 	textSize(15);
 	mp = false;
-	rect(85, 75, 100, 40);
+	rect(85 + camera.position.x - width / 2, 75 + camera.position.y - height / 2, 100, 40);
 	stroke(40, 40, 255);
 	strokeWeight(3);
 	fill(233, 40, 40);
-	text(mouseX + " " + mouseY, 100, 100);
+	text(mouseX + " " + mouseY, 100 + camera.position.x - width / 2, 100 + camera.position.y - height / 2);
 	stroke(140, 170, 100);
 	fill(190, 190, 190);
 	strokeWeight(10);
-	rect(100, 550, 1200, 140);
-	rect(170, 620, 150, 40);
-	rect(1080, 620, 150, 40);
+	rect(100 + camera.position.x - width / 2, 550 + camera.position.y - height / 2, 1200, 140);
+	rect(170 + camera.position.x - width / 2, 620 + camera.position.y - height / 2, 150, 40);
+	rect(1080 + camera.position.x - width / 2, 620 + camera.position.y - height / 2, 150, 40);
 	strokeWeight(3);
 	fill(0, 0, 0);
-	text(Opt1, 190, 645);
-	text(Opt2, 1110, 645);
-	text(roleText, 520, 600);
+	text(Opt1, 190 + camera.position.x - width / 2, 645 + camera.position.y - height / 2);
+	text(Opt2, 1110 + camera.position.x - width / 2, 645 + camera.position.y - height / 2);
+	text(roleText, 520 + camera.position.x - width / 2, 600 + camera.position.y - height / 2);
 }
 function updatekeys() {
 
@@ -61,4 +61,6 @@ function updatekeys() {
 		if (keyIsDown(DOWN_ARROW) || keyDown("s")) {
 			player.position.y += 5;
 		}
+		camera.position.x = player.position.x;
+	camera.position.y = player.position.y;
 	}
