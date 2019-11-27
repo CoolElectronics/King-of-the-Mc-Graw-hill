@@ -11,6 +11,7 @@ request.onload = function() {
            d = JSON.parse(request.responseText);
            for (var i = 0; i < d.len ;i++){
          tempwall = createSprite(d[i].pos[0],d[i].pos[1],d[i].size[0],d[i].size[1]);
+         tempwall.rotation = d[i].rotation;
          world.push(tempwall);
        }
 }

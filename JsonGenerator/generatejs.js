@@ -1,26 +1,32 @@
 var player;
-var z = 0.4;
+var z = 3.5;
 var elem;
 var omx,omy;
 var init = false;
 var index = 0;
 var w = 2;
 var h = 2;
-var x = 2;
-var y = 2;
-var speed = 15;
+var x;
+var y;
+var speed = 1;
 var l = 1;
 var v = 0;
 var npc;
+var r = 0,real = 0;
 var npx = [];
 var world = {}
 var npy = [];
 var npcs = [];
 var worldelements = [];
+var playeri;
 function setup() {
 createCanvas(window.innerWidth,window.innerHeight);
 player = createSprite(width / 2,height/2);
-player.addImage(loadImage('player.png'));
+x = width / 2;
+y = height / 2 - 100;
+playeri = loadImage('player.png');
+playeri.resize(20,0);
+player.addImage(playeri);
 }
 
 
@@ -38,6 +44,26 @@ keyhandler();
 drawMap();
 }
 //////////// KEYS
+const throttle = (func, limit) => {
+  let lastFunc
+  let lastRan
+  return function() {
+    const context = this
+    const args = arguments
+    if (!lastRan) {
+      func.apply(context, args)
+      lastRan = Date.now()
+    } else {
+      clearTimeout(lastFunc)
+      lastFunc = setTimeout(function() {
+        if ((Date.now() - lastRan) >= limit) {
+          func.apply(context, args)
+          lastRan = Date.now()
+        }
+      }, limit - (Date.now() - lastRan))
+    }
+  }
+}
 function keyhandler(){
 
 if(keyDown('w')){
@@ -75,30 +101,30 @@ if(!keyDown('i')){
 z -= 0.01;
 }
 if (keyDown(SHIFT)){
-speed = 40;
+speed = 4;
 }else{
-speed = 15;
+speed = 1;
 }
 if (keyDown(RETURN)){
-if (init){
-init = false;
-}else{
-init = true;
-}
+    if (init){
+    init = false;
+    }else{
+    init = true;
+    }
 }
 if (keyDown("b")){
-   w += 10;
+   w += speed;
  }
  if (keyDown("h")){
    if (w > 5){
-   w -= 10;
+   w -= speed;
    }}
   if (keyDown("v")){
-   h += 10;
+   h += speed;
  }
  if (keyDown("g")){
    if (h > 5){
-   h -= 10;
+   h -= speed;
    }
  }
   if (keyDown("l")){
@@ -112,6 +138,37 @@ if (keyDown("b")){
  }
  if (keyDown("n")){
    y -= speed;
+ }
+ if (keyDown("r")){
+   r -= 1;
+   if (r < 0){
+     r = 180;
+   }
+
+    if (!snaplock()){
+      real = r;
+    }
+ }
+ if (keyDown("t")){
+       r += 1;
+if (r > 180){
+r = 0;
+}
+
+    if (!snaplock()){
+      real = r;
+    }
+ }
+}
+function snaplock() {
+  // this decides what angle to rotate R at
+ if (r > 80 && r < 100){
+   real = 90;
+   return true;
+ }
+ if (r > 170 || r < 10){
+   real = 180;
+   return true;
  }
 }
 //////////// COLLISIONS ///////////////
@@ -145,6 +202,7 @@ function load(){
         world = JSON.parse(request.responseText);
         for (var i = 0; i < world.len;i++){
 elem = createSprite(world[i].pos[0],world[i].pos[1],world[i].size[0],world[i].size[1]);
+elem.rotation = world[i].rotation;
 elem.shapeColor = color(0);
 worldelements.push(elem);
 }
@@ -159,7 +217,7 @@ function gamedatasaver(){
   world = {};
 for (var i = 0; i < worldelements.length; i++){
   world.len = worldelements.length;
-  world[i] = {"pos" : [worldelements[i].position.x,worldelements[i].position.y], "size" : [worldelements[i].width,worldelements[i].height]};
+  world[i] = {"pos" : [worldelements[i].position.x,worldelements[i].position.y], "size" : [worldelements[i].width,worldelements[i].height], "rotation" : worldelements[i].rotation};
 }
 document.getElementById("gd").innerHTML = world;
 download("test.json",JSON.stringify(world));
@@ -178,8 +236,8 @@ function download(filename, text) {
 }
 /////////////////////////////    WORLD EDITOR ////////////////////////////////
 function creative(){
-textSize(100);
-    text("CREATE MODE",400 + player.position.x,400 + player.position.y);
+textSize(10);
+    text("CREATE MODE",40 + player.position.x,40 + player.position.y);
     if (keyDown("p")){
     npc = createSprite(x,y,332,522);
     npc.addAnimation("star",'star0001.png','star0002.png');
@@ -190,18 +248,18 @@ textSize(100);
 
     npcs.push(npc);
     }else{
-      if (npc == null){}else{
+      if (npc != null){
     npc.position.x = x;
     npc.position.y = y;
     }
     }
     if (keyDown(SHIFT)){
 elem = createSprite(x,y,w,h);
+elem.rotation = real;
 elem.shapeColor = color(0);
 worldelements.push(elem);
     }else{
- if(elem == null){
- }else{
+ if(elem != null){
  elem.position.x = x;
  elem.position.y = y;
  elem.width = w;
@@ -210,6 +268,7 @@ worldelements.push(elem);
  elem.height = h;
   elem._internalHeight = h;
  elem.originalHeight = h;
+ elem.rotation = real;
  }
 }
 }
