@@ -1,20 +1,23 @@
+"use strict";
 var player;
-var z = 3.5;
+var z = 0.36;
 var elem;
 var omx,omy;
 var init = false;
 var index = 0;
 var w = 2;
 var h = 2;
+var throttle = true;
 var x;
 var y;
-var speed = 1;
+var speed = 15;
 var l = 1;
 var v = 0;
 var npc;
 var r = 0,real = 0;
 var npx = [];
-var world = {}
+var world = {};
+var npdata = {};
 var npy = [];
 var npcs = [];
 var worldelements = [];
@@ -44,26 +47,6 @@ keyhandler();
 drawMap();
 }
 //////////// KEYS
-const throttle = (func, limit) => {
-  let lastFunc
-  let lastRan
-  return function() {
-    const context = this
-    const args = arguments
-    if (!lastRan) {
-      func.apply(context, args)
-      lastRan = Date.now()
-    } else {
-      clearTimeout(lastFunc)
-      lastFunc = setTimeout(function() {
-        if ((Date.now() - lastRan) >= limit) {
-          func.apply(context, args)
-          lastRan = Date.now()
-        }
-      }, limit - (Date.now() - lastRan))
-    }
-  }
-}
 function keyhandler(){
 
 if(keyDown('w')){
@@ -100,17 +83,17 @@ z += 0.01;
 if(!keyDown('i')){
 z -= 0.01;
 }
-if (keyDown(SHIFT)){
-speed = 4;
-}else{
-speed = 1;
-}
 if (keyDown(RETURN)){
+  if (throttle){
+throttle = false;
+setTimeout(function () {throttle = true},500);
     if (init){
     init = false;
     }else{
     init = true;
     }
+
+}
 }
 if (keyDown("b")){
    w += speed;
@@ -221,6 +204,13 @@ for (var i = 0; i < worldelements.length; i++){
 }
 document.getElementById("gd").innerHTML = world;
 download("test.json",JSON.stringify(world));
+world = {};
+for (var i = 0; i < worldelements.length; i++){
+world.len = worldelements.length;
+world[i] = {"pos" : [worldelements[i].position.x,worldelements[i].position.y], "size" : [worldelements[i].width,worldelements[i].height], "rotation" : worldelements[i].rotation};
+}
+document.getElementById("gd").innerHTML = world;
+download("test.json",JSON.stringify(world));
 }
 function download(filename, text) {
   var element = document.createElement('a');
@@ -236,17 +226,45 @@ function download(filename, text) {
 }
 /////////////////////////////    WORLD EDITOR ////////////////////////////////
 function creative(){
-textSize(10);
-    text("CREATE MODE",40 + player.position.x,40 + player.position.y);
-    if (keyDown("p")){
-    npc = createSprite(x,y,332,522);
-    npc.addAnimation("star",'star0001.png','star0002.png');
-    npc.addAnimation("squish",'squish0001.png','squish0013.png');
-    npc.addAnimation("updown",'updown0001.png','updown0004.png');
-    npc.addAnimation("narrow",'narrow0001.png','narrow0009.png');
-    npc.addAnimation("angry",'angry0001.png','angry0006.png');
+textSize(100);
+    text("CREATE MODE",400 + player.position.x,400 + player.position.y);
+    if (keyCode === DELETE){
+      alert();
+if (npc != null){
+  npc.remove();
+  npc.unshift();
+}
+if (elem != null){
+  elem.remove();
+  elem.unshift();
+}
+    }
 
-    npcs.push(npc);
+    if (keyDown("p")){
+      if (throttle){
+    throttle = false;
+    setTimeout(function () {throttle = true},500);
+    npc = createSprite(x,y,332,522);
+    switch (Math.floor(random(0,5))){
+       case 0:
+       npc.addAnimation("star",'star0001.png','star0002.png');
+       break;
+       case 1:
+         npc.addAnimation("squish",'squish0001.png','squish0013.png');
+       break;
+       case 2:
+       npc.addAnimation("updown",'updown0001.png','updown0004.png');
+       break;
+       case 3:
+       npc.addAnimation("narrow",'narrow0001.png','narrow0009.png');
+       break;
+       case 4:
+       npc.addAnimation("angry",'angry0001.png','angry0006.png');
+       break;
+
+    }
+        npcs.push(npc);
+      }
     }else{
       if (npc != null){
     npc.position.x = x;
@@ -254,10 +272,14 @@ textSize(10);
     }
     }
     if (keyDown(SHIFT)){
+      if (throttle){
+    throttle = false;
+    setTimeout(function () {throttle = true},500);
 elem = createSprite(x,y,w,h);
 elem.rotation = real;
 elem.shapeColor = color(0);
 worldelements.push(elem);
+}
     }else{
  if(elem != null){
  elem.position.x = x;
@@ -271,6 +293,7 @@ worldelements.push(elem);
  elem.rotation = real;
  }
 }
+
 }
 ///////////////////////////     DRAWING THE NPCS AND THE WORLD      ///////////////////////////
 function drawMap(){

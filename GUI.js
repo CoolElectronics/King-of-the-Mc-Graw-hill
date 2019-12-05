@@ -1,3 +1,4 @@
+"use strict";
 var Opt1 = " ";
 var Opt2 = " ";
 var roleText = " ";
