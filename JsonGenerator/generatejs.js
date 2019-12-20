@@ -8,6 +8,10 @@ var index = 0;
 var w = 2;
 var h = 2;
 var throttle = true;
+var throttle1 = true;
+var throttle2 = true;
+var throttle3 = true;
+var throttle4 = true;
 var x;
 var y;
 var speed = 15;
@@ -19,6 +23,7 @@ var npx = [];
 var world = {};
 var npdata = {};
 var npy = [];
+var shide = true;
 var npcs = [];
 var worldelements = [];
 var playeri;
@@ -48,7 +53,19 @@ drawMap();
 }
 //////////// KEYS
 function keyhandler(){
-
+if (keyDown(OPTION)){
+  if (throttle){
+throttle = false;
+setTimeout(function () {throttle = true},500);
+if (shide){
+  shide = false;
+  document.getElementById("save").style = "display:none";
+}else{
+  shide = true;
+  document.getElementById("save").style = "display:block";
+}
+}
+}
 if(keyDown('w')){
 player.velocity.y = -1 * speed;
 }else{
@@ -96,33 +113,66 @@ setTimeout(function () {throttle = true},500);
 }
 }
 if (keyDown("b")){
-   w += speed;
+  if (throttle1){
+throttle1 = false;
+setTimeout(function () {throttle1 = true},250);
+   w += speed * 2.5;
+ }
  }
  if (keyDown("h")){
+   if (throttle1){
+ throttle1 = false;
+ setTimeout(function () {throttle1 = true},250);
    if (w > 5){
-   w -= speed;
+   w -= speed * 2.5;
+ }
    }}
   if (keyDown("v")){
-   h += speed;
+    if (throttle2){
+  throttle2 = false;
+  setTimeout(function () {throttle2 = true},250);
+   h += speed * 2.5;
+ }
  }
  if (keyDown("g")){
+   if (throttle2){
+ throttle2 = false;
+ setTimeout(function () {throttle2 = true},250);
    if (h > 5){
-   h -= speed;
+   h -= speed * 2.5;
    }
  }
-  if (keyDown("l")){
-   x += speed;
  }
- if (keyDown("k")){
-   x -= speed;
+  if (keyDown(RIGHT_ARROW)){
+    if (throttle1){
+  throttle1 = false;
+  setTimeout(function () {throttle1 = true},250);
+   x += speed * 2.5;
  }
-  if (keyDown("m")){
-   y += speed;
  }
- if (keyDown("n")){
-   y -= speed;
+ if (keyDown(LEFT_ARROW)){
+   if (throttle1){
+ throttle1 = false;
+ setTimeout(function () {throttle1 = true},250);
+   x -= speed * 2.5;
+ }
+ }
+  if (keyDown(DOWN_ARROW)){
+    if (throttle2){
+  throttle2 = false;
+  setTimeout(function () {throttle2 = true},250);
+   y += speed * 2.5;
+ }
+ }
+ if (keyDown(UP_ARROW)){
+   if (throttle2){
+ throttle2 = false;
+ setTimeout(function () {throttle2 = true},250);
+   y -= speed * 2.5;
+ }
  }
  if (keyDown("r")){
+// elem.setCollider(OrientedBoundingBoxCollider(createVector(x,y),w,h,real));
    r -= 1;
    if (r < 0){
      r = 180;
@@ -136,12 +186,18 @@ if (keyDown("b")){
        r += 1;
 if (r > 180){
 r = 0;
+
 }
 
     if (!snaplock()){
       real = r;
     }
- }
+  }
+    if (keyDown("f")){
+      speed = 60;
+    }else{
+      speed = 15;
+    }
 }
 function snaplock() {
   // this decides what angle to rotate R at
@@ -158,6 +214,7 @@ function snaplock() {
 function worldhandler(){
 for (var i = 0; i < worldelements.length;i++){
 player.collide(worldelements[i]);
+worldelements[i].debug = true;
 }
 }
 /////////////// LOAD AND SAVE FUNCTIONALITY //////////////////////////
@@ -189,6 +246,29 @@ elem.rotation = world[i].rotation;
 elem.shapeColor = color(0);
 worldelements.push(elem);
 }
+for (var i = 0; i < world.NPCS.length;i++){
+npc = createSprite(world.NPCS[i].pos[0],world.NPCS[i].pos[1],332,522);
+switch (Math.floor(random(0,5))){
+   case 0:
+   npc.addAnimation("star",'star0001.png','star0002.png');
+   break;
+   case 1:
+     npc.addAnimation("squish",'squish0001.png','squish0013.png');
+   break;
+   case 2:
+   npc.addAnimation("updown",'updown0001.png','updown0004.png');
+   break;
+   case 3:
+   npc.addAnimation("narrow",'narrow0001.png','narrow0009.png');
+   break;
+   case 4:
+   npc.addAnimation("angry",'angry0001.png','angry0006.png');
+   break;
+
+}
+    npcs.push(npc);
+    npc = null;
+}
 }
      }
 
@@ -198,16 +278,15 @@ worldelements.push(elem);
 }
 function gamedatasaver(){
   world = {};
+  world.NPCS = {};
+  world.NPCS.length = npcs.length;
+for (var i = 0; i < npcs.length; i++){
+  world.NPCS[i] = {"pos" : [npcs[i].position.x,npcs[i].position.y]};
+  world.NPCS[i].dialouge = {"question" : "", "opA": "","opB" : "", "callbackA" : "","callbackB" : "","animation": {"mode" : "static", "image1" : "", "lastimg" : "","animswitchmarkers":[1,2,3,4],"numimgs": 1}};
+}
 for (var i = 0; i < worldelements.length; i++){
   world.len = worldelements.length;
   world[i] = {"pos" : [worldelements[i].position.x,worldelements[i].position.y], "size" : [worldelements[i].width,worldelements[i].height], "rotation" : worldelements[i].rotation};
-}
-document.getElementById("gd").innerHTML = world;
-download("test.json",JSON.stringify(world));
-world = {};
-for (var i = 0; i < worldelements.length; i++){
-world.len = worldelements.length;
-world[i] = {"pos" : [worldelements[i].position.x,worldelements[i].position.y], "size" : [worldelements[i].width,worldelements[i].height], "rotation" : worldelements[i].rotation};
 }
 document.getElementById("gd").innerHTML = world;
 download("test.json",JSON.stringify(world));
@@ -228,7 +307,7 @@ function download(filename, text) {
 function creative(){
 textSize(100);
     text("CREATE MODE",400 + player.position.x,400 + player.position.y);
-    if (keyCode === DELETE){
+    if (keyDown(DELETE)){
       alert();
 if (npc != null){
   npc.remove();
@@ -241,6 +320,7 @@ if (elem != null){
     }
 
     if (keyDown("p")){
+      elem = null;
       if (throttle){
     throttle = false;
     setTimeout(function () {throttle = true},500);
@@ -279,6 +359,7 @@ elem = createSprite(x,y,w,h);
 elem.rotation = real;
 elem.shapeColor = color(0);
 worldelements.push(elem);
+npc = null;
 }
     }else{
  if(elem != null){

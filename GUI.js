@@ -12,20 +12,19 @@ class RP {
 	}
 	ask() {
 		if (Guibutton(170, 620, 150, 40)) {
-      if (trigger1 !== null){
-			this.trigger1();
+      if (this.trigger1 !== null){
+			return this.trigger1();
     }
   }
 		if (Guibutton(1080, 620, 150, 40)) {
-      if (trigger2 !== null){
-			this.trigger2();
+      if (this.trigger2 !== null){
+			return this.trigger2();
 		 }
     }
 	 }
 }
 function drawGui() {
 	textSize(15);
-	mp = false;
 	rect(85 + camera.position.x - width / 2, 75 + camera.position.y - height / 2, 100, 40);
 	stroke(40, 40, 255);
 	strokeWeight(3);
@@ -64,4 +63,11 @@ function updatekeys() {
 		}
 		camera.position.x = player.position.x;
 	camera.position.y = player.position.y;
+	}
+	function Guibutton(x,y,w,h) {
+		if (mouseIsPressed){
+		return mouseX >= x && mouseX <= x+w && mouseY >= y && mouseY <= y+h;
+	}else{
+		return false;
+	}
 	}

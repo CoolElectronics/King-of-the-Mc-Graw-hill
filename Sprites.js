@@ -24,4 +24,5 @@ function worldProcess() {
   for (var i = 0; i < world.length; i++){
    player.collide(world[i]);
   }
+  
 }
