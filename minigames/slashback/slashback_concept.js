@@ -1,12 +1,12 @@
-var x = 700;
-var y = 400;
-var velocity = [0,0];
-var gravity = 0.1;
 var gravamax = 10;
-var r;
-var backdrop;
+var images = ["backdrop.png"];
+var players = [];
+var enemies = [];
+var hazards = [];
 function preload() {
-  backdrop = loadImage("backdrop.png");
+  for (var i in images) {
+images[i] = loadImage(images[i]);
+  }
 }
 function setup() {
 createCanvas(1400,800);
@@ -24,7 +24,7 @@ function draw() {
     translate(width /- 2,height / -2);
   }else{
     for (i = 1400 * - 40 ;i < 80 * 1400;i += 1400){
-    image(backdrop,i,0);
+    image(images[0],i,0);
   }
     camera.position.x = x;
   if (velocity[1] < 15){
@@ -64,9 +64,84 @@ function beamR(cx, cy, x, y, angle) {
         ny = (cos * (y - cy)) - (sin * (x - cx)) + cy;
     return [nx, ny];
 }
-class enemy {
+class Enemy {
   constructor(x,y,power,hp) {
+    this.x = x;
+    this.y = y;
+    this.w = hp;
+    this.h = hp;
+    this.power = power;
+    this.hp = hp;
+  }
+  collide(other){
 
   }
 }
-n
+class Platform {
+  constructor(x,y,w,h,r) {
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+    this.r = r;
+    this.texture = null;
+  }
+  collide(other){
+
+  }
+}
+class Boss {
+  constructor(x,y,power,hp) {
+    this.x = x;
+    this.y = y;
+    this.w = hp;
+    this.h = hp;
+    this.power = power;
+    this.hp = hp;
+    this.texture = null;
+  }
+  collide(other){
+
+  }
+}
+class Player {
+  constructor(x,y,power,recoil,thisplayer) {
+    this.x = x;
+    this.y = y;
+    this.w = hp / 2;
+    this.h = hp / 2;
+    this.r = 0;
+    this.thisplayer = thisplayer;
+    this.velocity = [0,0];
+    this.gravity = 1;
+    this.power = power;
+    this.recoil = recoil;
+    this.hp = hp;
+    this.texture = null;
+  }
+  show(){
+    push();
+      translate(this.x,this.y);
+      rotate(this.r);
+      rect(-20,-20,this.w,this.h);
+    pop();
+  }
+  update(){
+    this.x += this.velocity[0];
+    this.y += this.velocity[1];
+    this.velocity[1] += gravity;
+    if (thisplayer){
+    this.r =
+  }
+  }
+}
+class Hazards {
+  constructor() {
+   this.texture = null;
+  }
+}
+class Beam {
+  constructor() {
+    this.texture = null;
+  }
+}
