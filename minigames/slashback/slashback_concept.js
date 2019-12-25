@@ -7,54 +7,25 @@ function preload() {
   for (var i in images) {
 images[i] = loadImage(images[i]);
   }
+  players.push( new Player(700,400,5,5,100,true));
 }
 function setup() {
 createCanvas(1400,800);
 }
 function draw() {
   background(0);
-  if (y > height - 50 || y < 0){
-    translate(random(0,50),random(0,50));
-    fill(255,0,0);
-    textSize(40);
-    translate(width / 2,height / 2);
-    rotate(random(-0.1,0.1));
-    camera.position.x = width / 2;
-    text("YOU DIED",-100,0);
-    translate(width /- 2,height / -2);
-  }else{
+  players[0].cam();
     for (i = 1400 * - 40 ;i < 80 * 1400;i += 1400){
     image(images[0],i,0);
   }
-    camera.position.x = x;
-  if (velocity[1] < 15){
-velocity[1] += gravity;
-}
-y += velocity[1];
-x += velocity[0];
- r = Math.atan2(mouseX - width / 2, - (mouseY - y));
-push();
-  translate(x,y);
-  rotate(r);
-  strokeWeight(0);
-  rect(-20,-20,40,40);
-pop();
+  players[0].show();
+players[0].update();
 strokeWeight(10);
 fill(255);
-
 stroke(255,0,0);
-if (mouseIsPressed){
-  let beam = beamR(x,y,x,y + -1000,r);
-    line(x,y,beam[0],beam[1]);
-  let forcevect = beamR(0,0,0,-1,r);
-  console.log(forcevect);
-  velocity[0] -= forcevect[0];
-  velocity[1] -= forcevect[1];
-}
 strokeWeight(0)
 fill(100);
 rect(0,height - 50,width * 100,50);
-}
 }
 function beamR(cx, cy, x, y, angle) {
     var radians = -1 * angle,
@@ -105,13 +76,13 @@ class Boss {
   }
 }
 class Player {
-  constructor(x,y,power,recoil,thisplayer) {
+  constructor(x,y,power,recoil,hp,thisplayer) {
     this.x = x;
     this.y = y;
     this.w = hp / 2;
     this.h = hp / 2;
     this.r = 0;
-    this.thisplayer = thisplayer;
+    this.player = thisplayer;
     this.velocity = [0,0];
     this.gravity = 1;
     this.power = power;
@@ -120,6 +91,7 @@ class Player {
     this.texture = null;
   }
   show(){
+
     push();
       translate(this.x,this.y);
       rotate(this.r);
@@ -127,12 +99,24 @@ class Player {
     pop();
   }
   update(){
-    this.x += this.velocity[0];
-    this.y += this.velocity[1];
-    this.velocity[1] += gravity;
-    if (thisplayer){
-    this.r =
+    this.x += this.velocity[0] / this.hp * 10;
+    this.y += this.velocity[1] / this.hp * 10;
+    if (this.velocity[1] < 60){
+    this.velocity[1] += this.gravity;
   }
+    if (this.player){
+    this.r = Math.atan2(mouseX - width / 2, - (mouseY - this.y));
+    if (mouseIsPressed){
+      let beam = beamR(this.x,this.y,this.x,this.y + -1000,this.r);
+        line(this.x,this.y,beam[0],beam[1]);
+      let forcevect = beamR(0,0,0,-1,this.r);
+      this.velocity[0] -= forcevect[0] * this.recoil;
+      this.velocity[1] -= forcevect[1] * this.recoil;
+    }
+  }
+  }
+  cam(){
+translate(this.x * -1 + 700,0);
   }
 }
 class Hazards {
@@ -144,4 +128,14 @@ class Beam {
   constructor() {
     this.texture = null;
   }
+}
+function youdied() {
+  translate(random(0,50),random(0,50));
+  fill(255,0,0);
+  textSize(40);
+  translate(width / 2,height / 2);
+  rotate(random(-0.1,0.1));
+  camera.position.x = width / 2;
+  text("YOU DIED",-100,0);
+  translate(width /- 2,height / -2);
 }
