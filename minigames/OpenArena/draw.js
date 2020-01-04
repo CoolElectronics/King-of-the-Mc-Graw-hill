@@ -12,8 +12,13 @@ background(0);
 getcontrollers();
 avgzoom = 0;
 for (let i = 0; i < players.length; i++) {
-interface(players[i].gp,players[i]);
+  if (players[i] != "dead"){
+if (interface(players[i].gp,players[i]) == "dead"){
+  players[i] = "dead";
+}else{
 avgzoom += players[i].position.x;
+}
+}
 }
 avgzoom = avgzoom / players.length;
 camera.position.x = avgzoom;

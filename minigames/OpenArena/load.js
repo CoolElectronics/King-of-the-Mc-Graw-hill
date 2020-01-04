@@ -19,6 +19,9 @@ players[i] = createSprite(700,400,70,70);
 players[i].gp = navigator.getGamepads()[i];
 players[i].charge = 0;
 players[i].cancharge = true;
+players[i].attack = false;
+players[i].damage = 0;
+players[i].nc = false;
 if (Math.floor(Math.random() * 2) == 0){
 players[i].dir = -1;
 }else{
@@ -26,6 +29,21 @@ players[i].dir = -1;
 }
 }else{
   players[i].gp = navigator.getGamepads()[i];
+}
+}else{
+  if (players[i] == null){
+  players[i] = createSprite(700,400,70,70);
+  players[i].gp = {axes : [-0.003921568393707275, -0.003921568393707275, 0, 0],buttons : { 0 : {pressed : false},1 : {pressed : false},2 : {pressed : false},3 : {pressed : false},4 : {pressed : false}}}
+  players[i].charge = 0;
+  players[i].cancharge = true;
+  players[i].attack = false;
+  players[i].damage = 0;
+  players[i].nc = false;
+  if (Math.floor(Math.random() * 2) == 0){
+  players[i].dir = -1;
+  }else{
+    players[i].dir = 1;
+  }
 }
 }
 }
