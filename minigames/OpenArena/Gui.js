@@ -12,6 +12,17 @@ console.log(b);
 if (player.cancharge){
   player.cd = player.dir;
 }
+player.punch = false;
+if (controller.buttons[5].pressed){
+player.punch = true;
+player.position.x += random(-5,5);
+player.punchpow = player.charge + 10;
+}
+if (controller.buttons[7].pressed){
+player.punch = true;
+player.position.x += random(-15,15);
+player.punchpow = player.charge + 30;
+}
 if (controller.buttons[1].pressed && player.cancharge){
   player.charge ++;
   player.throw = 0;
@@ -75,7 +86,7 @@ if (controller.buttons[2].pressed && player.jumps > 1){
   player.velocity.y = 100;
 }
 
-if (player.position.y < -1000 || player.position.x > 1000 || player.position.x < -1000 || player.position.y > 800){
+if (player.position.y < -1500 || player.position.x > 2400 || player.position.x < -1400 || player.position.y > 1400 || player.damage > 10000){
 return "dead";
 }else{
 checkdamage(player);
@@ -92,18 +103,26 @@ function checkdamage(thisp) {
         thisp.position.x = player.x + players[p].dir * 100;
         thisp.velocity.y = 0;
       }else if (players[p].velocity.y > 90){
-        thisp.damage += 100;
-        thisp.velocity.y = -50;
-        thisp.velocity.x = players[p].dir * 50;
+        thisp.damage += 1000;
+        thisp.velocity.y = -20;
+        thisp.velocity.x = players[p].dir * 20;
         thisp.nc = true;
       }
     }
+    if (players[p].punch && dist(player.x,player.y,thisp.position.x,thisp.position.y) < 80 && players[p] != thisp){
+      thisp.damage += players[p].punchpow;
+      thisp.position.x += 5 * players[p].dir;
+        }
     if (players[p].throw != 0 && dist(thisp.position.x,thisp.position.y,players[p].cx  + (100 * players[p].cd) + players[p].throw,players[p].cy) < 70 + players[p].charge && thisp != players[p]){
       thisp.damage += 10;
+      thisp.velocity.y = -6;
+      thisp.velocity.x = players[p].charge / 2 * players[p].cd;
+      thisp.nc = true;
+      setTimeout(() => thisp.nc = false,500);
     }
     fill(255);
     textSize(50);
-    text(players[p].damage,((p + 1) * 100) + camera.position.x,60);
+    text(players[p].damage,(((p + 1) * 300) + camera.position.x) - 700,60);
   }
   }
 }
