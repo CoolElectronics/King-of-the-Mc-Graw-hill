@@ -23,7 +23,7 @@ player.punch = true;
 player.position.x += random(-15,15);
 player.punchpow = player.charge + 30;
 }
-if (controller.buttons[1].pressed && player.cancharge){
+if (controller.buttons[1].pressed && player.cancharge  && player.charge < 80){
   player.charge ++;
   player.throw = 0;
   player.cx = player.position.x;
@@ -104,7 +104,7 @@ function checkdamage(thisp) {
         thisp.velocity.y = 0;
       }else if (players[p].velocity.y > 90){
         thisp.damage += 1000;
-        thisp.velocity.y = -20;
+        thisp.velocity.y = -13;
         thisp.velocity.x = players[p].dir * 20;
         thisp.nc = true;
       }
