@@ -7,6 +7,8 @@ request.onload = function() {
            let d = JSON.parse(request.responseText);
            for (let i = 0; i < d.len ;i++){
          tempwall = createSprite(d[i][0],d[i][1],d[i][2],d[i][3]);
+         let img = loadImage(d[i][4]);
+         tempwall.img = img;
          world.push(tempwall);
        }
 }
