@@ -133,3 +133,15 @@ function checkdamage(thisp) {
   }
   }
 }
+function title() {
+  image(bk,0,0);
+  setTimeout(() => gstate = "fight",5000);
+}
+function cselect() {
+image(bk,0,0);
+getcontrollers();
+for (let p = 0; p < players.length;p++){
+  fill(0,0,p * 100);
+  ellipse(p * 100,100,50,50);
+}
+}

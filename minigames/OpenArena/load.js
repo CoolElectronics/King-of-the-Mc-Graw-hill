@@ -18,6 +18,7 @@ for (let i = 0; i < navigator.getGamepads().length; i++){
 if (navigator.getGamepads()[i] != null){
 if (players[i] == null){
 players[i] = createSprite(700,400,70,70);
+players[i].addAnimation("normal","players/Bit/Bit00.png","players/Bit/Bit32.png");
 players[i].gp = navigator.getGamepads()[i];
 players[i].charge = 0;
 players[i].cancharge = true;
