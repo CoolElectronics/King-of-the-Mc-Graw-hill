@@ -1,8 +1,11 @@
+var rtf = false;
+var rf = [];
 function interface(controller,player) {
   if (player.position.y < 0){
     fill(255);
     ellipse(player.position.x,50,constrain(100 - abs(player.position.y) / 10,10,100));
   }
+    player.mirrorX(player.dir);
   if (controller != null){
   for (let b = 0; b < controller.buttons.length;b++) {
       if (controller.buttons[b].pressed){
@@ -13,14 +16,9 @@ if (player.cancharge){
   player.cd = player.dir;
 }
 player.punch = false;
-if (controller.buttons[5].pressed){
-player.punch = true;
-player.position.x += random(-5,5);
-player.punchpow = player.charge + 10;
-}
 if (controller.buttons[7].pressed){
 player.punch = true;
-player.position.x += random(-15,15);
+player.position.x += random(-5,5);
 player.punchpow = player.charge + 30;
 }
 if (controller.buttons[1].pressed && player.cancharge  && player.charge < 140){
@@ -135,13 +133,44 @@ function checkdamage(thisp) {
 }
 function title() {
   image(bk,0,0);
-  setTimeout(() => gstate = "fight",5000);
+  setTimeout(() => gstate = "cselect",5000);
 }
 function cselect() {
-image(bk,0,0);
-getcontrollers();
-for (let p = 0; p < players.length;p++){
-  fill(0,0,p * 100);
-  ellipse(p * 100,100,50,50);
+  var ofx = width / 10;
+  var ofy = height / 2;
+background(0);
+rtf = false
+for (let p = 0; p < playerdata.length;p++) {
+image(playerdata[p].animations.window[0],ofx,ofy);
+for (let i = 0; i < players.length; i++){
+  if (clicked(players[i].x,players[i].y,ofx,ofy,playerdata[p].animations.window[0].width,playerdata[p].animations.window[0].height) && players[i].gp.buttons[0].pressed){
+    alert("player " + (i + 1) + " has chosen " + playerdata[p].name);
+    playerdata[p].chosen.push(i);
+    players[i].madechoice = true;
+    rf.push(i);
+  }
 }
+ofx += playerdata[p].animations.window[0].width;
+}
+getcontrollers(true);
+if (rf.length == players.length && players.length > 0){
+  rect(0,height / 2 - 100,width,200);
+  fill(0);
+  textSize(100);
+  text("Ready to fight",width / 2,height / 2);
+  setTimeout(() => gstate = 'fight',1000);
+  players = [];
+}
+
+
+for (let p = 0; p < players.length;p++){
+  fill(players[p].color[0],players[p].color[1],players[p].color[2]);
+  ellipse(players[p].x,players[p].y,50,50);
+  players[p].x += players[p].gp.axes[0] * 2;
+  players[p].y += players[p].gp.axes[1] * 2;
+}
+
+}
+function clicked(x,y,x2,y2,w,h) {
+return x > x2 && x < x2 + w && y > y2 && y < y2 + h;
 }

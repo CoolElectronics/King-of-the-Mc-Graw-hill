@@ -1,0 +1,15 @@
+{
+  "name" : "Bit",
+  "animations" : {
+    "walking" : ["players/Bit/Bit00.png","players/Bit/Bit10.png"],
+    "attacked" : ["players/Bit/Bit18.png"],
+    "punch" : ["players/Bit/Bit19.png","players/Bit/Bit21.png"],
+    "ram" : ["players/Bit/Bit21.png","players/Bit/Bit27.png"],
+    "idle" : ["players/Bit/Bit28.png","players/Bit/Bit32.png"],
+    "window" : ["players/Bit/Bit00.png"]
+  },
+  "chosen" : [],
+  "moveset" : {
+    "7" : "function (player){player.punch = true; player.changeAnimation('punch'); player.position.x += random(-5,5); player.punchpow = player.charge + 30;}"
+  }
+}

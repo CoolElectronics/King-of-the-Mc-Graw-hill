@@ -1,0 +1,16 @@
+{
+  "name" : "gigaman",
+  "animations" : {
+    "walking" : ["players/gigaman/gigaman03.png","players/gigaman/gigaman05.png"],
+    "attacked" : ["players/gigaman/gigaman56.png","players/gigaman/gigaman53.png"],
+    "punch" : ["players/gigaman/gigaman57.png","players/gigaman/gigaman59.png"],
+    "fkick" : ["players/gigaman/gigaman46.png","players/gigaman/gigaman50.png"],
+    "lkick" : ["players/gigaman/gigaman41.png","players/gigaman/gigaman44.png"],
+    "idle" : ["players/gigaman/gigaman00.png"],
+    "window" : ["players/gigaman/gigaman00.png"]
+  },
+  "chosen" : [],
+  "moveset" : {
+    "7" : "function (player){player.punch = true; player.changeAnimation('punch'); player.position.x += random(-5,5); player.punchpow = player.charge + 30;}"
+  }
+}
