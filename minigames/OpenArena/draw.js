@@ -42,10 +42,28 @@ function fight() {
     players[i] = "dead";
     playersdead ++;
   }else{
+    text("P" + (i + 1),players[i].position.x - players[i].width / 2,players[i].position.y - 100);
   avgzoom += players[i].position.x;
   }
   }
   }
   avgzoom = avgzoom / (players.length - playersdead);
   camera.position.x = avgzoom;
+  if (playersdead == players.length - 1 && players.length > 0){
+    for (let i = 0; i < players.length; i++) {
+      if (players[i] != "dead"){
+        alert("Player " + (i + 1) + " has won the game!");
+        players = [];
+        playersdead = 0;
+        ofx = 0;
+        ofy = 0;
+        for (let i = 0; i < playerdata.length; i++) {
+            playerdata[i].chosen = [];
+        }
+        rf = [];
+        gstate = "cselect";
+        return;
+      }
+    }
+  }
 }

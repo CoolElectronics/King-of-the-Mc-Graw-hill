@@ -23,20 +23,20 @@ request.open('GET', "players/players.json");
 request.send();
 request.onload = function() {
 let d = JSON.parse(request.responseText);
-console.log(d);
+
 for (let i = 0; i < d.len ;i++){
-  console.log(d[i]);
+
 pr.push(new XMLHttpRequest());
 let playerq = pr[i];
 playerq.open('GET',d[i]);
 playerq.send();
 playerq.onload = function() {
-  console.log(playerq.responseText);
+
 let p = JSON.parse(playerq.responseText);
-for (var i in p.animations) {
+for (let i in p.animations) {
   if (p.animations[i].length == 1){
-for (var img in p.animations[i]) {
-  console.log(p.animations[i][img]);
+for (let img in p.animations[i]) {
+
   let pathtoimage = p.animations[i][img];
 p.animations[i][img] = loadImage(pathtoimage);
 }
@@ -82,15 +82,8 @@ for (let i = 0; i < navigator.getGamepads().length; i++){
 if (navigator.getGamepads()[i] != null){
 if (players[i] == null){
 players[i] = createSprite(700,400,70,70);
-players[i].addAnimation("normal","players/Bit/Bit00.png","players/Bit/Bit32.png");
-players[i].gp = navigator.getGamepads()[i];
-players[i].charge = 0;
-players[i].cancharge = true;
-players[i].attack = false;
-players[i].damage = 0;
-players[i].punch = false;
-players[i].punchpow = 0;
-players[i].nc = false;
+loadplayer(i);
+playersvar(i);
 if (Math.floor(Math.random() * 2) == 0){
 players[i].dir = -1;
 }else{
@@ -111,4 +104,36 @@ let img = loadImage(d[i][4]);
 tempwall.img = img;
 world.push(tempwall);
 }
+}
+function loadplayer(x) {
+  let player = players[x];
+    for (let i = 0; i < playerdata.length; i++) {
+      for (let o = 0; o < playerdata[i].chosen.length; o++) {
+        console.log(playerdata[i].chosen[o] + " " + i);
+        if (playerdata[i].chosen[o] == x){
+          console.log(playerdata[i].chosen[o] + " " + i);
+          if (playerdata[i].animations.idle.length < 2){
+
+          player.addAnimation("idle",playerdata[i].animations.idle[0],playerdata[i].animations.idle[0]);
+          }else{
+
+          player.addAnimation("idle",playerdata[i].animations.idle[0],playerdata[i].animations.idle[1]);
+        }
+      }
+    }
+  }
+}
+function playersvar(i) {
+  players[i].gp = navigator.getGamepads()[i];
+  players[i].charge = 0;
+  players[i].cancharge = true;
+  players[i].attack = false;
+  players[i].damage = 0;
+  players[i].punch = false;
+  players[i].punchpow = 0;
+  players[i].boom = false;
+  players[i].jumps = 0;
+  players[i].dejump = true;
+  players[i].lives = 0;
+  players[i].nc = false;
 }
