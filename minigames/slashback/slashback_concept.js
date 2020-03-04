@@ -39,6 +39,8 @@ if (debounce){
 debounce = false;
 setTimeout(() => {game = "title";debounce = true;},1000);
 }
+}else if (game = "adventure") {
+  adventure();
 }
 }
 function beamR(cx, cy, x, y, angle) {
@@ -306,7 +308,8 @@ class Boundary {
   collide(other){
     if (collideRectRect(this.x,this.y,this.w,this.h,other.x,other.y,other.w,other.h)){
       console.log("collide");
-      other.velocity = [0,0];
+      other.velocity[0] = -other.velocity[0];
+      other.velocity[1] = -other.velocity[1];
   }
 }
   update(){

@@ -136,4 +136,5 @@ function playersvar(i) {
   players[i].dejump = true;
   players[i].lives = 0;
   players[i].nc = false;
+  players[i].recodead = false;
 }

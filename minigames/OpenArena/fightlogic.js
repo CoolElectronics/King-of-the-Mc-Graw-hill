@@ -20,6 +20,7 @@
 // ATTACK
 // ATTACK
 function interface(controller,player) {
+  if (!player.recodead){
   if (player.position.y < 0){
     fill(255);
     ellipse(player.position.x,50,constrain(100 - abs(player.position.y) / 10,10,100));
@@ -53,19 +54,26 @@ if (controller.buttons[3].pressed && player.cancharge){
 player.attack = true;
 player.cancharge = false;
 player.cd = player.dir;
+console.log(controller.axes[1]);
+if (controller.axes[1] < -0.5){
 setTimeout(() => {
 player.attack = false;
 player.boom = true;
-setTimeout(() => player.boom = false,100);
+setTimeout(() => player.boom = false,1000);
 },1000);
-setTimeout(() => player.cancharge = true,2000);
+setTimeout(() => player.cancharge = true,4000);
+}else{
+  setTimeout(() => player.attack = false,1000);
+  setTimeout(() => player.cancharge = true,2000);
+}
 }
 if (player.attack){
   player.position.x += random(5,20) * player.cd;
   player.velocity.y = -0.1;
-
-
 }
+  if (player.boom){
+    ellipse(player.position.x,player.position.y,400,400);
+  }
 if (player.charge > 0 && (player.throw + player.cx > 1500 || player.throw + player.cx < -100)){
   player.charge = 0;
   player.throw = 0;
@@ -89,17 +97,15 @@ for (let i = 0; i < world.length;i++) {
   if (!player.overlap(world[i]) && player.velocity.y < 19){
     player.velocity.y += 0.1;
   }
-  console.log(player.jumps);
-if (player.overlap(world[i])){
+if (player.collide(world[i])){
   if (!player.nc){
-  player.collide(world[i]);
     player.velocity.x -= player.velocity.x / 15;
     player.jumps = 0;
         player.velocity.y = 0;
 
   }else{
-  player.velocity.x = player.velocity.x * -1.1;
-  player.velocity.x = player.velocity.y * -2;
+  player.velocity.x = player.velocity.x * -1;
+  player.velocity.y = player.velocity.y * -1.08;
   }
 
 }else{
@@ -123,15 +129,20 @@ if (player.position.y < -10000 || player.position.y > 1400 || player.damage > 10
 if (player.lives > 2){
 return "dead";
 }else{
+  player.recodead = true;
   player.position.x = width / 2;
-  player.position.y = 100;
+  player.position.y = 60;
+  player.velocity.x = 0;
+  player.velocity.y = 0;
   player.lives ++;
   player.damage = 0;
+ setTimeout(() => player.recodead = false,5000);
 }
 }else{
 checkdamage(player);
 }
 this.constrain = (v,cl,cu) => {if (v > cu){return cu;}else if (v < cl){return cl;}else{return v;}}
+}
 }
 }
 // CHECK FOR ATTACKS
@@ -153,9 +164,11 @@ function checkdamage(thisp) {
     let enemy = players[p];
     if (enemy != "dead"){
     let player = enemy.position;
-    if (dist(thisp.position.x,thisp.position.y,enemy.position.x,enemy.position.y) < 140 && enemy.boom){
-      thisp.velocity.x = 10 * thisp.damage * thisp.dir / 100;
-      thisp.velocity.y = 10 * thisp.damage / 100;
+    if (dist(thisp.position.x,thisp.position.y,enemy.position.x,enemy.position.y) < 140 && enemy.boom && enemy !=thisp){
+      thisp.velocity.x = 40 * enemy.cd;
+      thisp.velocity.y = -40 * thisp.damage / 200;
+      thisp.nc = true;
+      setTimeout(() => thisp.nc = false,6000);
     }
     if (collideRectRect(player.x,player.y,70,70,thisp.position.x,thisp.position.y,70,70) && enemy != thisp){
       if (enemy.punch){
@@ -163,7 +176,7 @@ function checkdamage(thisp) {
       thisp.position.x += 2 * enemy.dir;
     }
       if (enemy.attack){
-        thisp.damage += 1;
+        thisp.damage += 1.5;
         thisp.position.x = player.x + enemy.dir * 100;
         thisp.velocity.y = 0;
       }else if (enemy.velocity.y > 40){
@@ -172,7 +185,7 @@ function checkdamage(thisp) {
         thisp.velocity.x = enemy.dir * 10 * thisp.damage / 100;
         if (thisp.damage > 100){
         thisp.nc = true;
-        setTimeout(() => thisp.nc = false,500);
+        setTimeout(() => thisp.nc = false,5000);
       }
       }
     }
@@ -183,7 +196,7 @@ function checkdamage(thisp) {
       thisp.velocity.x = enemy.charge / 2 * enemy.cd * thisp.damage / 50;
       if (thisp.velocity.y > 5){
       thisp.nc = true;
-      setTimeout(() => thisp.nc = false,500);
+      setTimeout(() => thisp.nc = false,5000);
     }
     }
     fill(255);
