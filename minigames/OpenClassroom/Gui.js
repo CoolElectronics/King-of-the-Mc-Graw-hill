@@ -27,7 +27,7 @@ for (let i = 0; i < players.length; i++){
   }
   }
 }
-ofx += playerdata[p].animations.window[0].width;
+ofx += playerdata[p].animations.window[0].width; 
 }
 function lselect() {
 
