@@ -1,0 +1,13 @@
+
+{
+  "Level1" : "questions/lvl1.csv",
+  "Level2" : "questions/lvl2.csv",
+  "Level3" : "questions/lvl3.csv",
+  "Level4" : "questions/lvl4.csv",
+  "Level5" : "questions/lvl5.csv",
+  "Level6" : "questions/lvl6.csv",
+  "Level7" : "questions/lvl7.csv",
+  "Level8" : "questions/lvl8.csv",
+  "Level9" : "questions/lvl9.csv",
+  "Level10" : "questions/lvl10.csv"
+}

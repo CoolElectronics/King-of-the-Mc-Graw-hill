@@ -1,0 +1,8 @@
+{
+"0" : [100,600,400,50,"textures/panel1.png"],
+"1" : [900,600,400,50,"textures/panel1.png"],
+"2" : [500,400,400,50,"textures/panel1.png"],
+"3" : [100,150,400,50,"textures/panel1.png"],
+"4" : [900,150,400,50,"textures/panel1.png"],
+"len" : 5
+}

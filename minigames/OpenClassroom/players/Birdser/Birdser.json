@@ -1,0 +1,15 @@
+{
+  "name" : "Birdser",
+  "animations" : {
+    "walking" : ["players/Birdser/Birdser00.png","players/Birdser/Birdser00.png"],
+    "attacked" : ["players/Birdser/Birdser00.png"],
+    "punch" : ["players/Birdser/Birdser00.png","players/Birdser/Birdser00.png"],
+    "ram" : ["players/Birdser/Birdser00.png","players/Birdser/Birdser00.png"],
+    "idle" : ["players/Birdser/Birdser00.png","players/Birdser/Birdser00.png"],
+    "window" : ["players/Birdser/Birdser00.png"]
+  },
+  "chosen" : [],
+  "moveset" : {
+    "7" : "function (player){player.punch = true; player.changeAnimation('punch'); player.position.x += random(-5,5); player.punchpow = player.charge + 30;}"
+  }
+}
