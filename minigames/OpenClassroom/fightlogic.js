@@ -139,6 +139,10 @@ for (let i = 0; i < world.length;i++) {
     player.velocity.y += 0.1;
   }
 if (player.overlap(world[i])){
+  if (player.groundpound){
+    player.groundpound = false;
+    player.collide(world[i]);
+  }
   if (!player.nc){
     if (player.position.y < world[i].position.y - world[i].height / 2){
       player.collide(world[i]);
@@ -168,10 +172,11 @@ player.dejump = false;
 setTimeout(() => player.dejump = true,200);
 }
 if (controller.buttons[2].pressed){
-  if (controller.axes[1] < 0.5 && player.waybackup){
+  if (controller.axes[1] < -0.9 && player.waybackup){
     player.waybackup = false;
     player.velocity.y = -30;
-  }else if (player.jumps > 1 && !controller.buttons[0].pressed){
+  }else if (player.jumps > 1 && !controller.buttons[0].pressed && controller.axes[1] > 0){
+    player.groundpound = true;
   player.velocity.y = 41;
 }
 }
