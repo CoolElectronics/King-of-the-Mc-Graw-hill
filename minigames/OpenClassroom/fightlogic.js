@@ -175,7 +175,7 @@ if (controller.buttons[2].pressed){
   if (controller.axes[1] < -0.9 && player.waybackup){
     player.waybackup = false;
     player.velocity.y = -30;
-  }else if (player.jumps > 1 && !controller.buttons[0].pressed && controller.axes[1] > 0){
+  }else if (player.jumps > 1 && !controller.buttons[0].pressed && controller.axes[1] >= 0){
     player.groundpound = true;
   player.velocity.y = 41;
 }

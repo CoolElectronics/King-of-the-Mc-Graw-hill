@@ -68,6 +68,7 @@ playerdata.push(p);
 }
 
 function getcontrollers(overload) {
+    if(typeof overload !== "undefined") {
   if (!(navigator.getGamepads()[0] == null && navigator.getGamepads()[1] == null && navigator.getGamepads()[2] == null)) {
     for (let i = 0; i < navigator.getGamepads().length; i++){
     if (navigator.getGamepads()[i] != null){
@@ -123,6 +124,41 @@ function getcontrollers(overload) {
     }
   }
 }
+}else{
+  if (!(navigator.getGamepads()[0] == null && navigator.getGamepads()[1] == null && navigator.getGamepads()[2] == null)){
+  for (let i = 0; i < navigator.getGamepads().length; i++){
+  if (navigator.getGamepads()[i] != null){
+  if (players[i] == null){
+  players[i] = createSprite(700,400,70,70);
+  loadplayer(i);
+  playersvar(i);
+  if (Math.floor(Math.random() * 2) == 0){
+  players[i].dir = -1;
+  }else{
+    players[i].dir = 1;
+  }
+  }else{
+    players[i].gp = navigator.getGamepads()[i];
+  }
+  }
+  }
+}else{
+  for (let i = 0; i < 2; i++){
+  if (players[i] == null){
+  players[i] = createSprite(700,400,70,70);
+  loadplayer(i);
+  playersvar(i);
+  if (Math.floor(Math.random() * 2) == 0){
+  players[i].dir = -1;
+  }else{
+    players[i].dir = 1;
+  }
+  }else{
+    players[i].gp = getPseudoGamepads()[i];
+  }
+  }
+}
+  }
 }
 function getPseudoGamepads() {
   var a11 = 0;
@@ -151,7 +187,7 @@ function getPseudoGamepads() {
   }else if (keyIsDown(83)){
     a02 = 1;
   }
-  return [{axes:[a01,a02],buttons:[{pressed:keyIsDown(87)},{pressed:keyIsDown(72)},{pressed:keyIsDown(71)},{pressed:keyIsDown(70)},0,0,0,{pressed:keyIsDown(84)}]},{axes:[a11,a12],buttons:[{pressed:keyIsDown(87)},{pressed:keyIsDown(72)},{pressed:keyIsDown(71)},{pressed:keyIsDown(70)},0,0,0,{pressed:keyIsDown(84)}]}];
+  return [{axes:[a01,a02],buttons:[{pressed:keyIsDown(87)},{pressed:keyIsDown(72)},{pressed:keyIsDown(71)},{pressed:keyIsDown(70)},0,0,0,{pressed:keyIsDown(84)}]},{axes:[a11,a12],buttons:[{pressed:keyIsDown(38)},{pressed:keyIsDown(76)},{pressed:keyIsDown(75)},{pressed:keyIsDown(74)},0,0,0,{pressed:keyIsDown(73)}]}];
 }
 function lvlload(lvlq) {
 let d = JSON.parse(lvlq.responseText);
@@ -172,8 +208,11 @@ function loadplayer(x) {
           if (playerdata[i].animations.idle.length < 2){
 
           player.addAnimation("idle",playerdata[i].animations.idle[0],playerdata[i].animations.idle[0]);
+          player.width = playerdata[i].animations.idle[0].width;
+          player.height = playerdata[i].animations.idle[0].height;
           }else{
-
+            player.width = playerdata[i].animations.idle[0].width;
+            player.height = playerdata[i].animations.idle[0].height;
           player.addAnimation("idle",playerdata[i].animations.idle[0],playerdata[i].animations.idle[1]);
         }
       }

@@ -12,7 +12,7 @@ background(0);
 for (let p = 0; p < playerdata.length;p++) {
 image(playerdata[p].animations.window[0],ofx,ofy);
 for (let i = 0; i < players.length; i++){
-  if (clicked(players[i].x,players[i].y,ofx,ofy,playerdata[p].animations.window[0].width,playerdata[p].animations.window[0].height) && players[i].gp.buttons[0].pressed){
+  if (clicked(players[i].x,players[i].y,ofx,ofy,playerdata[p].animations.window[0].width,playerdata[p].animations.window[0].height) && players[i].gp.buttons[7].pressed){
     if (players[i].madechoice){
       rf.pop(i);
       playerdata[p].chosen.splice(playerdata[p].chosen.find((e) => {return playerdata[p].chosen[e] == i;}),1);
@@ -45,7 +45,7 @@ if (rf.length == players.length && players.length > 0){
   text("Ready to fight",width / 2 - 100,height / 2);
   if (tmout){
   for (let z = 0; z < players.length; z++){
-    if (players[z].gp.buttons[0].pressed){
+    if (players[z].gp.buttons[7].pressed){
       gstate = "fight";
     }
   }

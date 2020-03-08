@@ -15,6 +15,7 @@ function preload() {
 function setup() {
   document.body.innerHTML = "";
   createCanvas(1400,800);
+  document.getElementsByClassName('p5Canvas')[0].style = "padding: 0;margin: auto;  display: block;  width: 1400px;height: 800px;position: absolute;  top: 0;  bottom: 0;left: 0;right: 0;";
 }
 function draw() {
  if (gstate == "fight"){
