@@ -1,5 +1,6 @@
 var tempwall;
 var pr = [];
+var questions = {};
 function loadAllWorlds() {
 var request = new XMLHttpRequest();
 request.open('GET', "levels/levels.json");
@@ -14,6 +15,24 @@ lvlq.onload = function() {
 lvldata.push(lvlq);
 lvlload(lvlq);
 }
+}
+}
+}
+function loadAllQuestions() {
+var request = new XMLHttpRequest();
+request.open('GET', "questions/AllQuestions.json");
+request.send();
+request.onload = function() {
+let d = JSON.parse(request.responseText);
+for (let lvl in d){
+let table = loadTable(d[lvl], 'csv',function () {
+    questions[lvl] = [];
+  for (var i = 0; i < table.rows.length; i++) {
+    console.log(table.rows[i]);
+
+    questions[lvl][i] = table.rows[i].arr;
+  }
+});
 }
 }
 }
@@ -137,4 +156,5 @@ function playersvar(i) {
   players[i].lives = 0;
   players[i].nc = false;
   players[i].recodead = false;
+  players[i].waybackup = false;
 }
